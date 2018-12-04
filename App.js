@@ -6,8 +6,8 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,9 +21,22 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <SpriteMapper
+          src="/images/t-rex-sprite.png"
+          cuts={[{ x, y, width, height }, { x, y, width, height }]}
+          sequences={{
+            flyingEnemy: [3, 4]
+          }}
+          fps={24}
+        >
+          <Sprite
+            play={}
+            sequence=''
+            y={}
+            x={}
+            onHit={() => console.log('colidiu')}
+          />
+        </SpriteMapper>
       </View>
     );
   }
