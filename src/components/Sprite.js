@@ -1,8 +1,8 @@
 import * as React from "react";
-import { View } from "react-native";
+import { View, ImageBackground } from "react-native";
 import "./Sprite.sass";
 
-class Rect {
+export class Rect {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
@@ -11,7 +11,7 @@ class Rect {
   }
 }
 
-class Sprite extends React.Component {
+export default class Sprite extends React.Component {
   state = {
     frame: 0
   };
@@ -27,19 +27,34 @@ class Sprite extends React.Component {
     setTimeout(this.play, 1000 / fps);
   };
 
+  loop = () => {
+    const { frame } = this.state;
+    const { sequences, sequence } = this.props;
+    this.setState({
+      frame: (frame + 1) % sequences[sequence].length
+    });
+  };
+
   render() {
-    const {
-      sequences,
-      cuts,
-      fps,
-      style,
-      src,
-      play,
-      sequence,
-      x,
-      y
-    } = this.props;
+    const { frame } = this.state;
+    const { sequences, cuts, style, src, sequence, x, y } = this.props;
     const sequenceCuts = sequences[sequence].map(e => cuts[e]);
-    return <View style={Sprite} />;
+    const currentCut = sequenceCuts[frame];
+    return (
+      <ImageBackground
+        source={`url(${src})`}
+        style={{
+          ...style,
+          left: `${x}px`,
+          top: `${y}px`,
+          backgroundPosition: `-${currentCut.x}px -${currentCut.y}px`,
+          height: `${currentCut.height}px`,
+          width: `${currentCut.width}px`
+        }}
+      >
+        <View style={Sprite} />
+        );
+      </ImageBackground>
+    );
   }
 }
